@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kontak Kami - Spice Lens</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font: Montserrat & Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+      /* ==================== 1. VARIABEL WARNA (SAMA DENGAN HOMEPAGE) ==================== */
+      :root {
+        --bg-header-footer: #4b4f36; 
+        --bg-content-green: #657649; 
+        --bg-hero-card: #4e5238; /* Warna Kartu Gelap */
+        --text-light: #fffcf5;
+        --text-dark: #333333;
+        --accent-yellow: #eaddcf; 
+        --accent-gold: #f0e68c;
+      }
+
+      body {
+        background-color: var(--bg-content-green);
+        color: var(--text-light);
+        font-family: "Montserrat", sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      /* ==================== 2. HEADER & NAVIGASI ==================== */
+      .custom-header {
+        width: 100%;
+        padding: 15px 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--bg-header-footer); 
+        z-index: 50;
+        position: relative;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      }
+
+      .header-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-light);
+        z-index: 51;
+      }
+
+      .header-logo i {
+        font-size: 1.8rem;
+        color: var(--accent-gold);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 30px;
+        transition: 0.3s ease-in-out;
+      }
+
+      .custom-header a {
+        color: var(--accent-yellow);
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: color 0.2s ease-in-out;
+      }
+
+      .custom-header a:hover {
+        color: #ffffff;
+      }
+
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        z-index: 51;
+      }
+      
+      .hamburger i {
+        font-size: 1.5rem;
+        color: var(--accent-gold);
+      }
+
+      /* ==================== 3. BACKGROUND & ANIMASI ==================== */
+      .hero-background {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+        background-image: url("image/leaf-pattern.png"); 
+        background-size: cover;
+        background-position: center;
+        filter: grayscale(20%);
+      }
+      .hero-overlay {
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(101, 118, 73, 0.65);
+        z-index: -1;
+      }
+
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      /* ==================== 4. MAIN CONTENT (CONTACT FORM) ==================== */
+      .main-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        width: 100%;
+        z-index: 1;
+      }
+
+      /* Container Kartu Kontak */
+      .contact-card {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr; /* Kiri (Form) lebih lebar dari Kanan (Info) */
+        width: 100%;
+        max-width: 1000px;
+        background-color: var(--bg-hero-card);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        border: 1px solid rgba(255,255,255,0.05);
+        
+        /* Animasi */
+        opacity: 0;
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      /* --- BAGIAN KIRI: FORMULIR --- */
+      .form-section {
+        padding: 50px;
+      }
+
+      .form-section h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--accent-gold);
+        margin-bottom: 10px;
+        line-height: 1.1;
+      }
+
+      .form-subtitle {
+        font-size: 1rem;
+        color: #e0e0e0;
+        margin-bottom: 40px;
+        font-weight: 300;
+      }
+
+      .form-group {
+        margin-bottom: 25px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--accent-yellow);
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+      }
+
+      .form-group input, 
+      .form-group textarea {
+        width: 100%;
+        padding: 12px 0;
+        background: transparent;
+        border: none;
+        border-bottom: 2px solid rgba(255,255,255,0.3);
+        color: white;
+        font-size: 1rem;
+        font-family: 'Montserrat', sans-serif;
+        outline: none;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus, 
+      .form-group textarea:focus {
+        border-bottom-color: var(--accent-gold);
+      }
+
+      .send-button {
+        display: inline-block;
+        padding: 12px 40px;
+        background-color: var(--accent-gold);
+        color: #4b4f36;
+        border-radius: 50px;
+        font-size: 1rem;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s, background-color 0.2s;
+        margin-top: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      }
+
+      .send-button:hover {
+        background-color: #fff;
+        transform: translateY(-2px);
+      }
+
+      /* --- BAGIAN KANAN: INFO KONTAK --- */
+      .info-section {
+        background-color: rgba(0, 0, 0, 0.2); /* Sedikit lebih gelap dari card utama */
+        padding: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+        border-left: 1px solid rgba(255,255,255,0.05);
+      }
+
+      .info-section h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        color: var(--accent-gold);
+        margin-bottom: 30px;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: flex-start; /* Icon sejajar dengan baris pertama teks */
+        margin-bottom: 30px;
+      }
+
+      .info-item i {
+        font-size: 1.4rem;
+        color: var(--accent-yellow);
+        margin-right: 20px;
+        margin-top: 3px;
+        width: 25px; /* Lebar tetap agar teks rata */
+        text-align: center;
+      }
+
+      .info-text h4 {
+        font-size: 1rem;
+        font-weight: 700;
+        color: white;
+        margin-bottom: 5px;
+      }
+
+      .info-text p {
+        font-size: 0.95rem;
+        color: #dcdcdc;
+        line-height: 1.6;
+      }
+
+      /* ==================== 5. FOOTER ==================== */
+      .custom-footer { 
+        width: 100%; background-color: var(--bg-header-footer); padding: 30px 50px; 
+        display: flex; justify-content: space-between; align-items: center; 
+        margin-top: auto; color: #dcdcdc; font-size: 0.9rem; 
+      }
+      .footer-logo { display: flex; flex-direction: column; align-items: center; color: var(--accent-gold); font-weight: bold; margin-right: 0; text-align: center; }
+      .footer-logo i { font-size: 2rem; margin-bottom: 5px; }
+      .footer-center-content { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+      .footer-icons a { color: white; margin: 0 10px; font-size: 1.5rem; }
+      .footer-copyright { font-size: 0.85rem; color: #dcdcdc; text-align: center; }
+      .footer-links { text-align: right; display: flex; flex-direction: column; gap: 5px; }
+      .footer-links a { color: #dcdcdc; text-decoration: none; }
+      .footer-links a:hover { color: var(--accent-gold); }
+
+      /* ==================== RESPONSIVE ==================== */
+      @media (max-width: 900px) {
+        .contact-card {
+          grid-template-columns: 1fr; /* Tumpuk vertikal di tablet/HP */
+        }
+        
+        .info-section {
+          border-left: none;
+          border-top: 1px solid rgba(255,255,255,0.1);
+          padding: 40px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .custom-header { padding: 15px 20px; }
+        .hamburger { display: block; }
+        
+        .nav-links {
+          position: absolute; top: 100%; left: 0; width: 100%;
+          background-color: var(--bg-header-footer);
+          flex-direction: column; align-items: center; padding: 20px 0; gap: 20px;
+          border-top: 1px solid rgba(255,255,255,0.1); display: none;
+        }
+        .nav-links.active { display: flex; }
+
+        .form-section { padding: 30px; }
+        .form-section h1 { font-size: 2.5rem; }
+        
+        .custom-footer { flex-direction: column; text-align: center; gap: 20px; padding: 20px; }
+        .footer-logo, .footer-center-content, .footer-links { width: 100%; order: initial; }
+        .footer-logo { order: 1; }
+        .footer-center-content { order: 2; }
+        .footer-links { order: 3; text-align: center;} 
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- BACKGROUND -->
+    <div class="hero-background"></div>
+    <div class="hero-overlay"></div>
+
+    <!-- NAVBAR -->
+    <header class="custom-header">
+      <div class="header-logo">
+        <i class="fas fa-sun"></i>
+        <span>Spice Lens</span>
+      </div>
+
+      <div class="hamburger" id="hamburger-menu">
+        <i class="fas fa-bars"></i>
+      </div>
+
+      <nav class="nav-links" id="nav-menu">
+          <a href="homepage.html">Beranda</a>
+          <a href="tentang-kami.html">Tentang Kami</a>
+          <a href="fitur.html">Fitur</a>
+          <a href="contact.html">Kontak</a>
+      </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      
+      <!-- CONTACT CARD (CONTAINER) -->
+      <div class="contact-card">
+        
+        <!-- BAGIAN KIRI: FORM -->
+        <div class="form-section">
+          <h1>Contact Us</h1>
+          <p class="form-subtitle">
+            Punya pertanyaan seputar rempah atau aplikasi Spice Lens? 
+            Jangan ragu untuk menghubungi kami.
+          </p>
+
+          <form action="#" method="POST">
+            <div class="form-group">
+              <label for="name">NAMA LENGKAP</label>
+              <input type="text" id="name" name="name" required placeholder="Masukkan nama Anda" />
+            </div>
+
+            <div class="form-group">
+              <label for="email">ALAMAT EMAIL</label>
+              <input type="email" id="email" name="email" required placeholder="email@contoh.com" />
+            </div>
+
+            <div class="form-group">
+              <label for="message">PESAN</label>
+              <textarea id="message" name="message" rows="3" required placeholder="Tulis pesan Anda di sini..."></textarea>
+            </div>
+
+            <button type="submit" class="send-button">KIRIM PESAN</button>
+          </form>
+        </div>
+
+        <!-- BAGIAN KANAN: INFO (DUMMY DATA) -->
+        <div class="info-section">
+          <h2>Info Kontak</h2>
+
+          <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <div class="info-text">
+              <h4>Alamat Kantor</h4>
+              <p>Jalan Raya Kampus Unud, Jimbaran,<br>Kuta Selatan, Badung, Bali 80361</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="fas fa-phone-alt"></i>
+            <div class="info-text">
+              <h4>Telepon</h4>
+              <p>+62 821 4567 8900</p>
+              <p>(0361) 701954</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="fas fa-envelope"></i>
+            <div class="info-text">
+              <h4>Email</h4>
+              <p>contact@spicelens.id</p>
+              <p>support@spicelens.id</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <i class="fas fa-clock"></i>
+            <div class="info-text">
+              <h4>Jam Operasional</h4>
+              <p>Senin - Jumat: 09.00 - 17.00 WITA</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="custom-footer">
+      <div class="footer-logo">
+        <i class="fas fa-sun"></i>
+        <span>Spice Lens</span>
+      </div>
+      
+      <div class="footer-center-content">
+          <div class="footer-icons">
+             <a href="#"><i class="fab fa-x-twitter"></i></a> 
+             <a href="#"><i class="fab fa-instagram"></i></a>
+             <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+          <p class="footer-copyright">Copyright 2025. Spice Lens. All Rights Reserved</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="homepage.html">Beranda</a>
+        <a href="tentang-kami.html">Tentang Kami</a>
+        <a href="contact.html">Kontak</a>
+      </div>
+    </footer>
+
+    <script>
+      // SCRIPT NAVBAR (HAMBURGER)
+      const hamburger = document.getElementById('hamburger-menu');
+      const navMenu = document.getElementById('nav-menu');
+      const icon = hamburger.querySelector('i');
+
+      hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        if (navMenu.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+      });
+    </script>
+  </body>
+</html>

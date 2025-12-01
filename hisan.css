@@ -1,0 +1,376 @@
+/*
+ * File: hisan.css
+ * Deskripsi: Berisi semua gaya kustom untuk semua halaman web (index, about, contact)
+ */
+
+/* --- Variabel Warna Global (Mengambil dari index.html) --- */
+:root {
+  --bg-dark-green: #4d5c38; /* Hijau Tua */
+  --bg-medium-green: #7a7a4f; /* Hijau Coklat untuk Base Genep di about.html */
+  --bg-light-yellow: #fff6e8; /* Krem Putih untuk Background Info di contact.html */
+  --text-light: #fff6e8; /* Krem Putih */
+  --text-dark: #333333; /* Hitam untuk teks di elemen terang */
+  --accent-yellow: #c4c478; /* Kuning Kecoklatan (Aksen Sudut) */
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* --- Gaya Dasar Tubuh (Body) Konsisten --- */
+body {
+  background-color: var(--bg-dark-green);
+  color: var(--text-light);
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* --- Header & Navigasi Konsisten --- */
+.custom-header {
+  width: 100%;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: flex-start;
+  gap: 30px;
+}
+
+.custom-header a {
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 400;
+  transition: color 0.2s ease-in-out;
+}
+
+.custom-header a:hover {
+  color: var(--accent-yellow);
+}
+
+/* --- Gaya Footer Konsisten --- */
+.custom-footer {
+  width: 100%;
+  background-color: var(--bg-dark-green);
+  padding: 40px 50px 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: auto; /* Memastikan footer selalu di bawah */
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--accent-yellow);
+}
+
+.footer-logo i {
+  font-size: 2.5rem;
+  margin-right: 10px;
+  color: var(--accent-yellow);
+}
+
+.footer-social a {
+  color: var(--text-light);
+  font-size: 1.5rem;
+  margin-right: 15px;
+  transition: color 0.3s;
+}
+
+.footer-social a:hover {
+  color: var(--accent-yellow);
+}
+
+.footer-social span {
+  display: block;
+  max-width: 400px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.footer-right a {
+  display: block;
+  color: var(--text-light);
+  text-decoration: none;
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+/* -------------------------------------------
+ *          Gaya Khusus About Us
+ * ------------------------------------------- */
+
+.about-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 60px 50px;
+  flex-grow: 1;
+}
+
+.about-card {
+  display: flex;
+  width: 90%;
+  max-width: 1200px;
+  background-color: var(--bg-medium-green);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+.text-section {
+  flex: 1;
+  padding: 60px 40px;
+  text-align: left;
+  color: var(--text-light);
+  background: rgba(0, 0, 0, 0.1); /* Sedikit gelap di belakang teks */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.text-section h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--text-light);
+  margin-bottom: 20px;
+}
+
+.text-section p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.image-section {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  /* Menggunakan latar belakang pola yang mirip seperti Base Genep */
+  background-image: url("base_genep_pattern.png"); /* Anda bisa ganti ini */
+  background-color: var(--bg-medium-green);
+  background-size: cover;
+}
+
+.image-section img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%); /* Efek potong sudut */
+  border-radius: 0 10px 10px 0;
+}
+
+/* -------------------------------------------
+ *         Gaya Khusus Contact Us
+ * ------------------------------------------- */
+
+.contact-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 50px;
+  flex-grow: 1;
+}
+
+.contact-card {
+  display: flex;
+  width: 90%;
+  max-width: 1000px;
+  background-color: var(--bg-medium-green);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px var(--shadow-color);
+}
+
+.form-section {
+  flex: 2;
+  padding: 40px;
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+}
+
+.form-section h1 {
+  font-size: 2.5rem;
+  color: var(--text-light);
+  margin-bottom: 5px;
+}
+
+.form-section p {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: var(--text-light);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--text-light);
+  background: transparent;
+  color: var(--text-light);
+  font-size: 1rem;
+  transition: border-bottom-color 0.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-bottom-color: var(--accent-yellow);
+}
+
+.info-section {
+  flex: 1;
+  background-color: var(--bg-light-yellow); /* Krem Putih */
+  color: var(--text-dark); /* Teks Hitam */
+  padding: 40px;
+  position: relative;
+  border-radius: 0 10px 10px 0;
+}
+
+.info-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: var(--text-dark);
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+
+.info-item i {
+  font-size: 1.5rem;
+  margin-right: 15px;
+  color: var(--bg-medium-green);
+}
+
+/* Aksen Kuning Kecil di Sudut Info Section */
+.info-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  background-color: var(--accent-yellow);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.contact-button {
+  background-color: var(--text-light);
+  color: var(--text-dark);
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease-in-out;
+  cursor: pointer;
+  border: none;
+  width: 100px;
+  align-self: flex-start;
+}
+
+.contact-button:hover {
+  background-color: var(--accent-yellow);
+}
+
+/* --- Responsif (Max-width 900px) --- */
+@media (max-width: 900px) {
+  /* About Card */
+  .about-card {
+    flex-direction: column;
+  }
+
+  .text-section {
+    order: 2; /* Pindah teks ke bawah */
+    padding: 40px 30px;
+  }
+
+  .image-section {
+    order: 1; /* Pindah gambar ke atas */
+    min-height: 300px;
+  }
+
+  .image-section img {
+    clip-path: none; /* Hapus efek potong di mobile */
+    border-radius: 10px 10px 0 0;
+  }
+
+  /* Contact Card */
+  .contact-card {
+    flex-direction: column;
+  }
+
+  .form-section {
+    padding: 30px;
+  }
+
+  .info-section {
+    border-radius: 0 0 10px 10px;
+  }
+
+  .info-section::before {
+    display: none; /* Sembunyikan aksen kecil di mobile */
+  }
+}
+
+/* Responsif Footer */
+@media (max-width: 768px) {
+  .custom-header {
+    justify-content: center;
+    padding: 15px 20px;
+  }
+
+  .custom-footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .footer-left {
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .footer-social {
+    margin-bottom: 10px;
+  }
+
+  .footer-social span {
+    text-align: center;
+  }
+
+  .footer-right {
+    text-align: center;
+  }
+
+  .footer-right a {
+    margin-bottom: 5px;
+  }
+}

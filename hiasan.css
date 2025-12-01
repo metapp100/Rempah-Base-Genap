@@ -1,0 +1,204 @@
+/* Warna yang digunakan:
+   - Hijau Tua Latar Belakang Luar: #4d5c38
+   - Hijau Coklat Utama: #7a7a4f
+   - Krem Terang (Info): #e8e8d8
+   - Kuning Kecoklatan (Aksen Sudut): #c4c478
+   - Teks Utama (Judul/Body): #fff6e8 (Krem Putih)
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  /* Latar Belakang Luar */
+  background-color: #4d5c38;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.outer-container {
+  /* Container untuk menjaga proporsi dan warna border hijau coklat */
+  background-color: #7a7a4f;
+  padding: 20px;
+  border-radius: 5px; /* Sedikit lengkungan sudut */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.contact-container {
+  /* Container Utama: Menggunakan Grid untuk tata letak 2 kolom */
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dua kolom dengan lebar yang sama */
+  max-width: 1000px;
+  background-color: #7a7a4f; /* Hijau Coklat Utama */
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+/* --- Bagian Formulir Kontak (Kiri) --- */
+.contact-form-section {
+  padding: 60px 50px;
+  color: #fff6e8; /* Warna teks Krem Putih */
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #fff6e8; /* Teks berwarna Krem Putih (Emas) */
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 300;
+  margin-bottom: 40px;
+  line-height: 1.5;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 30px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #fff6e8; /* Garis bawah Krem Putih */
+  color: #fff6e8;
+  font-size: 1rem;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-bottom: 1px solid #c4c478; /* Aksen Kuning Kecoklatan saat fokus */
+}
+
+/* Mengubah placeholder menjadi transparan agar tidak mengganggu */
+.form-group input::placeholder {
+  color: transparent;
+}
+
+.send-button {
+  width: 150px;
+  padding: 12px 20px;
+  background-color: #e8e8d8; /* Krem Terang */
+  color: #333;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-top: 15px;
+  transition: background-color 0.3s;
+}
+
+.send-button:hover {
+  background-color: #c4c478; /* Kuning Kecoklatan */
+}
+
+/* --- Bagian Info Kontak (Kanan) --- */
+.contact-info-section {
+  background-color: #e8e8d8; /* Krem Terang */
+  position: relative; /* Penting untuk penempatan elemen sudut */
+  padding: 60px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Untuk memposisikan konten di tengah vertikal */
+}
+
+.info-content {
+  color: #333;
+  z-index: 2; /* Agar konten berada di atas elemen sudut */
+}
+
+.contact-info-section h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: #333;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+}
+
+.info-item i {
+  font-size: 1.5rem;
+  margin-right: 15px;
+  width: 30px;
+  text-align: center;
+}
+
+/* Elemen Sudut Aksen (Kuning Kecoklatan) */
+.corner-element {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background-color: #c4c478; /* Kuning Kecoklatan */
+  z-index: 1;
+}
+
+.top-right {
+  top: 0;
+  right: 0;
+  /* Menggeser keluar sedikit untuk mendapatkan tampilan dari gambar */
+  transform: translate(0%, 0%);
+}
+
+.bottom-right {
+  bottom: 0;
+  right: 0;
+  /* Menggeser keluar sedikit untuk mendapatkan tampilan dari gambar */
+  transform: translate(-100%, 100%);
+}
+
+/* Responsif sederhana untuk layar kecil */
+@media (max-width: 900px) {
+  .contact-container {
+    grid-template-columns: 1fr; /* Menjadi satu kolom */
+  }
+
+  .contact-form-section {
+    padding: 40px 30px;
+  }
+
+  .contact-info-section {
+    padding: 40px 30px;
+    text-align: center;
+  }
+
+  .info-content {
+    margin: 0 auto;
+  }
+
+  .info-item {
+    justify-content: center;
+  }
+
+  /* Matikan elemen sudut di layar kecil agar tidak mengganggu tata letak vertikal */
+  .corner-element {
+    display: none;
+  }
+}

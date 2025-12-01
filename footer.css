@@ -1,0 +1,93 @@
+/* --- FOOTER KONSISTEN (Sama seperti About Us) --- */
+.custom-footer {
+  width: 100%;
+  background-color: var(--bg-dark-green);
+  padding: 40px 50px 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--accent-yellow);
+}
+
+.footer-logo i {
+  font-size: 2.5rem;
+  margin-right: 10px;
+  color: var(--accent-yellow);
+}
+
+.footer-social a {
+  color: var(--text-light);
+  font-size: 1.5rem;
+  margin-right: 15px;
+  transition: color 0.3s;
+}
+
+.footer-social a:hover {
+  color: var(--accent-yellow);
+}
+
+.footer-social span {
+  display: block;
+  max-width: 400px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.footer-right {
+  text-align: right;
+}
+
+.footer-right a {
+  display: block;
+  color: var(--text-light);
+  text-decoration: none;
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+/* --- RESPONSIVE FOOTER (Tambahkan di dalam @media (max-width: 768px) Anda) --- */
+@media (max-width: 768px) {
+  .custom-footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .footer-left {
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .footer-social {
+    margin-bottom: 10px;
+  }
+
+  .footer-social span {
+    text-align: center;
+  }
+
+  .footer-right {
+    text-align: center;
+  }
+
+  .footer-right a {
+    margin-bottom: 5px;
+  }
+}

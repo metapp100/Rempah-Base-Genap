@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spice Lens - Beranda</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+      /* ==================== 1. VARIABEL WARNA ==================== */
+      :root {
+        --bg-header-footer: #4b4f36; 
+        --bg-content-green: #657649; 
+        --bg-hero-card: #4e5238;
+        --text-light: #fffcf5;
+        --text-dark: #333333;
+        --accent-yellow: #eaddcf; 
+        --accent-gold: #f0e68c;
+      }
+
+      body {
+        background-color: var(--bg-content-green);
+        color: var(--text-light);
+        font-family: "Montserrat", sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      /* ==================== 2. HEADER & NAVIGASI ==================== */
+      .custom-header {
+        width: 100%;
+        padding: 15px 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--bg-header-footer); 
+        z-index: 50;
+        position: relative;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      }
+
+      .header-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-light);
+        z-index: 51;
+      }
+
+      .header-logo i {
+        font-size: 1.8rem;
+        color: var(--accent-gold);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 30px;
+        transition: 0.3s ease-in-out;
+      }
+
+      .custom-header a {
+        color: var(--accent-yellow);
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: color 0.2s ease-in-out;
+      }
+
+      .custom-header a:hover {
+        color: #ffffff;
+      }
+
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        z-index: 51;
+      }
+      
+      .hamburger i {
+        font-size: 1.5rem;
+        color: var(--accent-gold);
+      }
+
+      /* ==================== 3. HERO SECTION ==================== */
+      .hero-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 50px;
+        position: relative;
+        min-height: 85vh;
+        overflow: hidden;
+      }
+
+      .hero-background {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
+        background-image: url("image/leaf-pattern.png"); 
+        background-size: cover;
+        background-position: center;
+        filter: grayscale(20%);
+      }
+      .hero-overlay {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-color: rgba(101, 118, 73, 0.65);
+        z-index: -1;
+      }
+
+      .hero-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 1200px;
+        gap: 80px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .left-column {
+        flex: 0 1 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .hero-image {
+        width: 100%;
+        max-width: 450px;
+        height: auto;
+        margin-bottom: 10px;
+        filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); 
+        opacity: 0;
+        animation: fadeInUp 0.6s ease-out forwards;
+      }
+
+      .main-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        line-height: 1.1;
+        font-weight: 700;
+        color: var(--accent-gold);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        margin-top: -30px;
+
+        opacity: 0; 
+        animation: fadeInUp 0.6s ease-out 0.3s forwards;
+      }
+
+      .right-column {
+        flex: 0 1 auto;
+        display: flex;
+        justify-content: center;
+        padding-bottom: 40px;
+      }
+
+      .cta-card {
+        background-color: var(--bg-hero-card);
+        padding: 40px;
+        border-radius: 15px;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        opacity: 0;
+        animation: fadeInRight 1s ease-out 0.6s forwards;
+      }
+
+      .cta-card h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-light);
+        margin-bottom: 25px;
+      }
+
+      .action-button {
+        display: block;
+        width: 100%;
+        padding: 15px 0;
+        background-color: var(--accent-gold);
+        color: #4b4f36;
+        border-radius: 8px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: transform 0.2s, background-color 0.2s;
+        margin-bottom: 10px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .action-button:hover { background-color: #fff; transform: translateY(-2px); }
+      .or-text { display: block; color: #dcdcdc; font-size: 1rem; margin: 10px 0; font-style: italic; }
+      .small-desc { display: block; font-size: 0.8rem; color: #b0b0b0; margin-bottom: 20px; }
+
+      /* ==================== SEPARATOR & REMPAH ==================== */
+      .section-separator { width: 100%; background-color: var(--bg-header-footer); padding: 15px 50px; }
+      .separator-title { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--accent-yellow); margin: 0; }
+      
+      .spices-section { 
+        background: linear-gradient(rgba(101, 118, 73, 0.65)), url("image/leaf-pattern.png");
+        background-size: cover;
+        background-position: center;
+        padding: 60px 40px; 
+      }
+
+      .spices-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 30px; justify-items: center; max-width: 1200px; margin: 0 auto; }
+      .spice-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+      .spice-item a { text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center; }
+      .spice-item img { width: 110px; height: 110px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent-gold); margin-bottom: 10px; transition: transform 0.3s; background-color: white; }
+      .spice-item a:hover img { transform: scale(1.1); border-color:white ; }
+      .spice-item span { font-size: 0.9rem; color: white; font-weight: 500; }
+
+      /* ==================== FOOTER ==================== */
+      .custom-footer { 
+        width: 100%; 
+        background-color: var(--bg-header-footer); 
+        padding: 30px 50px; 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center; 
+        margin-top: auto; 
+        color: #dcdcdc; 
+        font-size: 0.9rem; 
+      }
+
+      .footer-logo { 
+        display: flex; 
+        flex-direction: column; 
+        align-items: center;
+        color: var(--accent-gold); 
+        font-weight: bold; 
+        margin-right: 0; 
+        text-align: center; 
+      }
+
+      .footer-logo i { font-size: 2rem; margin-bottom: 5px; }
+
+      .footer-center-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .footer-icons { margin-top: 0; }
+      .footer-icons a { 
+        color: white; 
+        margin: 0 10px; 
+        font-size: 1.5rem; 
+      }
+
+      .footer-copyright {
+        font-size: 0.85rem;
+        color: #dcdcdc;
+        text-align: center;
+      }
+            
+      .footer-links { 
+        text-align: right; 
+        display: flex; 
+        flex-direction: column; 
+        gap: 5px; 
+      }
+      .footer-links a { color: #dcdcdc; text-decoration: none; }
+      .footer-links a:hover { color: var(--accent-gold); }
+
+      /* ==================== RESPONSIVE (MOBILE MENU) ==================== */
+      @media (max-width: 1024px) {
+        .spices-grid { grid-template-columns: repeat(4, 1fr); }
+        .hero-content { flex-direction: column; align-items: center; gap: 40px; }
+        .right-column { justify-content: center; padding-bottom: 0; }
+        .main-title { font-size: 2.5rem; }
+      }
+      
+      @media (max-width: 768px) {
+        .custom-header { 
+          padding: 15px 20px; 
+        }
+
+        .hamburger {
+          display: block;
+        }
+
+        .nav-links {
+          position: absolute;
+          top: 100%; 
+          left: 0;
+          width: 100%;
+          background-color: var(--bg-header-footer); 
+          flex-direction: column;
+          align-items: center;
+          padding: 20px 0;
+          gap: 20px;
+          border-top: 1px solid rgba(255,255,255,0.1);
+          box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+          display: none; 
+        }
+
+        .nav-links.active {
+          display: flex; 
+        }
+
+        .spices-grid { grid-template-columns: repeat(3, 1fr); gap: 15px;}
+        .section-separator { padding: 15px 20px; }
+        .separator-title { font-size: 1.1rem; }
+        .custom-footer { 
+          flex-direction: column; 
+          text-align: center; 
+          gap: 20px; 
+          padding: 20px; 
+        }
+
+        .footer-logo, .footer-center-content, .footer-links {
+          width: 100%; 
+          order: initial; 
+        }
+        .footer-logo { order: 1; }
+        .footer-center-content { order: 2; }
+        .footer-links { order: 3; text-align: center;} 
+        .footer-icons { margin-top: 10px; } 
+      }
+      
+      @media (max-width: 480px) {
+        .spices-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+
+      /* ==================== ANIMASI MASUK ==================== */
+      @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      @keyframes fadeInRight {
+        from { opacity: 0; transform: translateX(50px); }
+        to { opacity: 1; transform: translateX(0); }
+      }
+
+      /* ==================== CSS UNTUK MODAL (POPUP) ==================== */
+      /* Latar belakang gelap (Overlay) */
+      .modal-overlay {
+        display: none; /* Tersembunyi default */
+        position: fixed;
+        z-index: 100; /* Paling atas */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.7); /* Hitam transparan */
+        backdrop-filter: blur(5px); /* Efek blur di background */
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      /* Agar bisa di-animasikan saat muncul */
+      .modal-overlay.show {
+        display: flex;
+        opacity: 1;
+      }
+
+      /* Kotak Konten Modal */
+      .modal-content {
+        background-color: #5e6443; /* Warna hijau senada tema */
+        color: var(--text-light);
+        margin: auto;
+        padding: 0;
+        border: 2px solid var(--accent-gold);
+        width: 90%;
+        max-width: 900px; /* Lebar maksimal */
+        border-radius: 15px;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+      }
+
+      .modal-overlay.show .modal-content {
+        transform: scale(1);
+      }
+
+      /* Tombol Close (X) */
+      .close-btn {
+        color: var(--accent-gold);
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        cursor: pointer;
+        z-index: 10;
+      }
+      .close-btn:hover { color: white; }
+
+      /* Layout Isi Modal (Flexbox Kiri-Kanan) */
+      .modal-body {
+        display: flex;
+        flex-direction: row;
+        padding: 30px;
+        gap: 30px;
+      }
+
+      .modal-img-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-img-wrapper img {
+        width: 100%;
+        max-width: 350px;
+        border-radius: 10px;
+        border: 3px solid var(--accent-gold);
+        object-fit: cover;
+      }
+
+      .modal-text {
+        flex: 1.5; /* Bagian teks lebih lebar */
+        text-align: left;
+      }
+
+      .modal-text h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        color: var(--accent-gold);
+        margin-bottom: 5px;
+      }
+
+      .latin-name {
+        font-style: italic;
+        color: #dcdcdc;
+        margin-bottom: 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+        padding-bottom: 10px;
+      }
+
+      /* Scrollbar khusus jika teks kepanjangan */
+      .desc-scroll {
+        max-height: 400px;
+        overflow-y: auto;
+        padding-right: 10px;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      /* Custom Scrollbar */
+      .desc-scroll::-webkit-scrollbar { width: 6px; }
+      .desc-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+      .desc-scroll::-webkit-scrollbar-thumb { background: var(--accent-gold); border-radius: 3px; }
+
+      /* Responsif untuk Modal di HP */
+      @media (max-width: 768px) {
+        .modal-body { flex-direction: column; }
+        .modal-img-wrapper img { max-width: 200px; }
+        .modal-text h2 { font-size: 2rem; text-align: center; }
+        .latin-name { text-align: center; }
+      }
+    </style>
+  </head>
+  <body>
+    
+    <header class="custom-header">
+      <div class="header-logo">
+        <i class="fas fa-sun"></i>
+        <span>Spice Lens</span>
+      </div>
+
+      <div class="hamburger" id="hamburger-menu">
+        <i class="fas fa-bars"></i>
+      </div>
+
+      <nav class="nav-links" id="nav-menu">
+          <a href="homepage.html">Beranda</a>
+          <a href="tentang-kami.html">Tentang Kami</a>
+          <a href="contact.html">Kontak</a>
+      </nav>
+    </header>
+
+    <main class="hero-section">
+      <div class="hero-background"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <div class="left-column">
+          <img src="image/Group 39.png" alt="Ilustrasi Deteksi Rempah" class="hero-image" 
+               onerror="this.style.display='none';" />
+          <h1 class="main-title">
+            Deteksi Rempah<br>Base Genep
+          </h1>
+        </div>
+
+        <div class="right-column">
+          <div class="cta-card">
+            <h2>Mau Pakai Fitur Yang Mana?</h2>
+            <a href="upload.html" class="action-button">Foto Rempah</a>
+            <span class="small-desc">Foto dan Upload untuk Deteksi</span>
+            <span class="or-text">atau</span>
+            <a href="real-time.html" class="action-button">Real-Time Cam</a>
+            <span class="small-desc">Akses kamera deteksi secara real-time</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="section-separator">
+        <h2 class="separator-title">Rempah - Rempah Base Genep</h2>
+    </div>
+
+    <section class="spices-section">
+      <div class="spices-grid">
+        <div class="spice-item"><a href="#" onclick="openModal('jahe', event)"><img src="rempah/Jahe.jpeg" alt="Jahe" /><span>Jahe</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('daun_salam', event)"><img src="rempah/Daun_Salam.jpeg" alt="Daun Salam" /><span>Daun Salam</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('kencur', event)"><img src="rempah/kencur.jpeg" alt="Kencur" /><span>Kencur</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('lengkuas', event)"><img src="rempah/lengkuas.jpeg" alt="Lengkuas" /><span>Lengkuas</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('kunyit', event)"><img src="rempah/kunyit.jpeg" alt="Kunyit" /><span>Kunyit</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('serai', event)"><img src="rempah/serai.jpeg" alt="Serai" /><span>Serai</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('biji_ketumbar', event)"><img src="rempah/Biji Ketumbar.jpeg" alt="Biji Ketumbar" /><span>Biji Ketumbar</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('daun_jeruk', event)"><img src="rempah/daun_jeruk.webp" alt="Daun Jeruk" /><span>Daun Jeruk</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('jinten', event)"><img src="rempah/Jinten.jpeg" alt="Jinten" /><span>Jinten</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('kemiri', event)"><img src="rempah/Kemiri.jpeg" alt="Kemiri" /><span>Kemiri</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('pala', event)"><img src="rempah/pala.jpeg" alt="Pala" /><span>Pala</span></a></div>
+        <div class="spice-item"><a href="#" onclick="openModal('lada', event)"><img src="rempah/lada.jpg" alt="Lada" /><span>Lada</span></a></div>
+      </div>
+    </section>
+
+    <footer class="custom-footer">
+      <div class="footer-logo">
+        <i class="fas fa-sun"></i>
+        <span>Spice Lens</span>
+      </div>
+      
+      <div class="footer-center-content">
+          <div class="footer-icons">
+             <a href="#"><i class="fab fa-x-twitter"></i></a> 
+             <a href="#"><i class="fab fa-instagram"></i></a>
+             <a href="#"><i class="fab fa-youtube"></i></a>
+          </div>
+          <p class="footer-copyright">Copyright 2025. Spice Lens. All Rights Reserved</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="homepage.html">Beranda</a>
+        <a href="tentang-kami.html">Tentang Kami</a>
+        <a href="contact.html">Kontak</a>
+      </div>
+    </footer>
+
+    <div id="spiceModal" class="modal-overlay">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        
+        <div class="modal-body">
+          <div class="modal-img-wrapper">
+             <img id="modalImg" src="" alt="Rempah">
+          </div>
+          
+          <div class="modal-text">
+            <h2 id="modalTitle">Nama Rempah</h2>
+            <p id="modalLatin" class="latin-name">Latin Name</p>
+            <div id="modalDesc" class="desc-scroll">
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // SCRIPT HAMBURGER MENU
+      const hamburger = document.getElementById('hamburger-menu');
+      const navMenu = document.getElementById('nav-menu');
+      const icon = hamburger.querySelector('i');
+
+      hamburger.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+        if (navMenu.classList.contains('active')) {
+            icon.classList.remove('fa-bars');
+            icon.classList.add('fa-times');
+        } else {
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+      });
+
+      // ==================== SCRIPT DATA & MODAL ====================
+      // Data Rempah-Rempah
+      const spiceData = {
+        jahe: {
+          title: "Jahe",
+          latin: "Zingiber officinale",
+          img: "rempah/Jahe.jpeg",
+          desc: `
+            <p>Jahe adalah tanaman herba tropis penghasil rimpang aromatik yang digunakan sebagai bumbu dan obat, dengan aroma kuat serta rasa pedas-hangat.</p>
+            <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Rimpang bercabang, menggumpal, dan mematah tidak beraturan.</li>
+              <li><strong>Warna:</strong> Bagian luar cokelat muda hingga tua; bagian dalam kekuningan.</li>
+              <li><strong>Tekstur:</strong> Serat halus hingga kasar, daging rimpang padat dan berair.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <li><strong>Aroma:</strong>  Wangi hangat, pedas dan menyegarkan.</li>
+            <li><strong>Rasa:</strong>  Pedas, hangat, sedikit pahit</li>
+          `
+        },
+        daun_salam: {
+          title: "Daun Salam",
+          latin: "Syzygium polyanthum",
+          img: "rempah/Daun_Salam.jpeg",
+          desc: `
+            <p>Daun Salam adalah daun rempah populer di Indonesia yang digunakan untuk memberi aroma lembut pada berbagai masakan, terutama sup, tumisan, dan hidangan berkuah..</p>
+            <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Lonjong, ujung meruncing.</li>
+              <li><strong>Warna:</strong> Hijau tua mengilap saat segar; cokelat saat kering.</li>
+              <li><strong>Tekstur:</strong> Tipis, agak kaku, permukaan halus.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <li><strong>Aroma:</strong>  Lembut, hangat, khas rempah.</li>
+            <li><strong>Rasa:</strong>  Tidak terlalu kuat, sedikit pahit-aromatis.</li>
+          `
+        },
+        kencur: {
+          title: "Kencur",
+          latin: "Kaempferia galanga",
+          img: "rempah/kencur.jpeg",
+          desc: `
+          <p>Kencur memiliki aroma yang sangat khas dan segar, sering digunakan dalam masakan seblak atau jamu beras kencur.</p>
+            <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Rimpang kecil-kecil, bulat atau lonjong, bergerombol.</li>
+              <li><strong>Warna:</strong> Kulit cokelat gelap/kering; bagian dalam putih.</li>
+              <li><strong>Tekstur:</strong> Daging lunak, mudah dipatahkan, tidak berserat kasar.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Sangat kuat, segar, dan menusuk (khas).</li>
+              <li><strong>Rasa:</strong> Pedas hangat, sedikit getir, meninggalkan rasa tebal di lidah.</li>
+            </ul>
+          `
+        },
+        lengkuas: {
+          title: "Lengkuas",
+          latin: "Alpinia galanga",
+          img: "rempah/lengkuas.jpeg",
+          desc: `
+          <p>Lengkuas atau laos adalah rimpang yang sering digunakan untuk masakan bersantan atau tumisan, dikenal dengan teksturnya yang keras.</p>
+            <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Rimpang besar, keras, dan bercabang.</li>
+              <li><strong>Warna:</strong> Kulit cokelat muda; bagian dalam putih kemerahan/merah muda.</li>
+              <li><strong>Tekstur:</strong> Keras, berserat kasar, sulit dipatahkan dengan tangan.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Segar, tajam, dan sedikit herbal (seperti sitrus/pinus).</li>
+              <li><strong>Rasa:</strong> Pedas ringan, hangat, dan agak pahit.</li>
+            </ul>
+          `
+        
+        },
+        kunyit: {
+          title: "Kunyit",
+          latin: "Curcuma longa",
+          img: "rempah/kunyit.jpeg",
+          desc: `
+          <p>Kunyit adalah rempah yang terkenal dengan warna kuning-oranye cerahnya. Selain sebagai pewarna alami, kunyit memiliki manfaat anti-inflamasi.</p>
+            <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Rimpang silindris, bercabang-cabang.</li>
+              <li><strong>Warna:</strong> Kulit jingga kecokelatan; daging dalam oranye terang.</li>
+              <li><strong>Tekstur:</strong> Mudah dipatahkan, meninggalkan noda warna kuning.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Khas tanah (*earthy*), sedikit menyengat.</li>
+              <li><strong>Rasa:</strong> Sedikit pahit, sepat, dan hangat.</li>
+            </ul>
+          `
+        },
+        serai: {
+          title: "Serai",
+          latin: "Cymbopogon citratus",
+          img: "rempah/serai.jpeg",
+          desc: `
+          <p>Serai atau sereh adalah tumbuhan rumput-rumputan yang dimanfaatkan batangnya untuk memberikan aroma segar pada masakan.</p>
+            <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Batang panjang, berlapis-lapis seperti rumput besar.</li>
+              <li><strong>Warna:</strong> Hijau pada daun, putih kekuningan pada pangkal batang.</li>
+              <li><strong>Tekstur:</strong> Berserat, keras, dan kaku.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Sangat segar seperti lemon (*citrusy*).</li>
+              <li><strong>Rasa:</strong> Sedikit pedas dan menyegarkan jika dimemarkan.</li>
+            </ul>
+          `
+        },
+        biji_ketumbar: {
+          title: "Biji Ketumbar",
+          latin: "Coriandrum sativum",
+          img: "rempah/Biji Ketumbar.jpeg",
+          desc: `
+          <p>Biji ketumbar adalah rempah biji-bijian kecil yang memberikan aroma hangat. Sering disangrai sebelum dihaluskan untuk memaksimalkan aroma.</p>
+            <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Bulat kecil, bergaris-garis vertikal.</li>
+              <li><strong>Warna:</strong> Cokelat muda kekuningan atau krem.</li>
+              <li><strong>Tekstur:</strong> Keras namun mudah hancur jika digerus, kopong di dalam.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Harum, agak manis, dengan nuansa kayu dan jeruk.</li>
+              <li><strong>Rasa:</strong> Gurih, hangat, sedikit rasa kulit jeruk.</li>
+            </ul>
+          `
+        },
+        daun_jeruk: {
+          title: "Daun Jeruk",
+          latin: "Citrus hystrix",
+          img: "rempah/daun_jeruk.webp",
+          desc: `
+          <p>Daun jeruk purut memiliki bentuk unik seperti angka 8. Aromanya sangat kuat dan segar, khas masakan Asia Tenggara.</p>
+          <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Unik seperti angka 8 (dua helai daun yang tersambung).</li>
+              <li><strong>Warna:</strong> Hijau tua pekat dan mengilap.</li>
+              <li><strong>Tekstur:</strong> Tebal, licin, dan kaku.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Sangat kuat, segar, khas jeruk limau.</li>
+              <li><strong>Rasa:</strong> Pahit jika dimakan langsung, namun menyegarkan.</li>
+            </ul>
+          `
+        },
+        jinten: {
+          title: "Jinten",
+          latin: "Cuminum cyminum",
+          img: "rempah/Jinten.jpeg",
+          desc: `
+          <p>Jinten berbentuk seperti biji padi kecil namun lebih gelap. Memiliki aroma kuat, pedas, dan sedikit manis.</p>
+          <p>Jinten sering digunakan dalam bumbu kari, gulai, atau opor. Bentuknya mirip gabah padi namun ukurannya sangat kecil.</p>
+            <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Lonjong kecil, pipih, dan lurus (mirip biji padi).</li>
+              <li><strong>Warna:</strong> Cokelat kekuningan hingga abu-abu kecokelatan.</li>
+              <li><strong>Tekstur:</strong> Keras, kering, bergaris halus.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Tajam, kuat, manis, dan musky.</li>
+              <li><strong>Rasa:</strong> Pedas, pahit, dengan sensasi hangat yang kuat.</li>
+            </ul>
+          `
+        },
+        kemiri: {
+          title: "Kemiri",
+          latin: "Aleurites moluccanus",
+          img: "rempah/Kemiri.jpeg",
+          desc: `
+          <p>Kemiri digunakan untuk mengentalkan kuah masakan dan memberikan rasa gurih yang *creamy*.</p>
+          <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Bulat agak gepeng, mirip kacang macadamia, berkerut.</li>
+              <li><strong>Warna:</strong> Putih krem atau kekuningan.</li>
+              <li><strong>Tekstur:</strong> Keras namun berminyak jika dihancurkan.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Lembut, samar, bau kacang mentah.</li>
+              <li><strong>Rasa:</strong> Gurih, *creamy*, dan berlemak.</li>
+            </ul>
+          `
+        },
+        pala: {
+          title: "Pala",
+          latin: "Myristica fragrans",
+          img: "rempah/pala.jpeg",
+          desc: `
+          <p>Biji pala memberikan rasa hangat, manis, dan aromatik. Sering digunakan dalam sup, semur, dan juga kue.</p>
+          <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Bulat lonjong seperti telur kecil, permukaan beralur.</li>
+              <li><strong>Warna:</strong> Cokelat tua di luar, cokelat muda berurat di dalam.</li>
+              <li><strong>Tekstur:</strong> Sangat keras dan padat.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Wangi manis, hangat, dan pedas.</li>
+              <li><strong>Rasa:</strong> Manis, pedas, hangat, dan aromatik.</li>
+            </ul>
+          `
+        },
+        lada: {
+          title: "Lada",
+          latin: "Piper nigrum",
+          img: "rempah/lada.jpg",
+          desc: `
+          <p>Raja rempah-rempah yang memberikan rasa pedas dan panas pada masakan.</p>
+          <p>Lada atau merica disebut sebagai "Raja Rempah", memberikan rasa pedas dan panas yang khas pada hampir semua jenis masakan.</p>
+            <br>
+            <strong style="color:var(--accent-gold)">Ciri - Ciri:</strong>
+            <ul style="list-style-type: disc; margin-left: 20px; margin-top: 5px;">
+              <li><strong>Bentuk:</strong> Bulat kecil-kecil, permukaan keriput.</li>
+              <li><strong>Warna:</strong> Hitam (lada hitam) atau Putih kekuningan (lada putih).</li>
+              <li><strong>Tekstur:</strong> Keras dan kering.</li>
+            </ul>
+            <br>
+            <strong style="color:var(--accent-gold)">Aroma & Rasa:</strong>
+            <ul style="list-style-type: none; margin-top: 5px;">
+              <li><strong>Aroma:</strong> Tajam, menusuk hidung, membuat bersin.</li>
+              <li><strong>Rasa:</strong> Pedas panas dan membakar di lidah.</li>
+            </ul>
+          `
+        }
+      };
+
+      // Fungsi Buka Modal
+      function openModal(key, event) {
+        if(event) event.preventDefault(); // Mencegah link pindah halaman
+
+        const data = spiceData[key];
+        if (data) {
+          // Isi data ke elemen modal
+          document.getElementById('modalTitle').innerText = data.title;
+          document.getElementById('modalLatin').innerText = data.latin;
+          document.getElementById('modalImg').src = data.img;
+          document.getElementById('modalDesc').innerHTML = data.desc;
+
+          // Tampilkan modal
+          const modal = document.getElementById('spiceModal');
+          modal.style.display = 'flex';
+          setTimeout(() => {
+            modal.classList.add('show');
+          }, 10);
+        }
+      }
+
+      // Fungsi Tutup Modal
+      function closeModal() {
+        const modal = document.getElementById('spiceModal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+          modal.style.display = 'none';
+        }, 300);
+      }
+
+      // Tutup jika klik di luar area konten
+      window.onclick = function(event) {
+        const modal = document.getElementById('spiceModal');
+        if (event.target == modal) {
+          closeModal();
+        }
+      }
+    </script>
+  </body>
+</html>

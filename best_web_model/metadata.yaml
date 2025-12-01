@@ -1,0 +1,31 @@
+description: Ultralytics best model trained on /content/drive/MyDrive/RempahAn.v4i.yolov8/data.yaml
+author: Ultralytics
+date: '2025-11-30T16:04:18.026858'
+version: 8.3.233
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 32
+task: detect
+batch: 1
+imgsz:
+- 640
+- 640
+names:
+  0: Biji Ketumbar
+  1: Daun Jeruk
+  2: Daun Salam
+  3: Jahe
+  4: Jinten
+  5: Kemiri
+  6: Kencur
+  7: Kunyit
+  8: Lada
+  9: Lengkuas
+  10: Pala
+  11: Serai
+args:
+  batch: 1
+  half: false
+  int8: false
+  nms: false
+channels: 3

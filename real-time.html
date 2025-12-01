@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spice Lens - Deteksi Rempah Real-time</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <style>
+      /* ==================== 1. VARIABEL WARNA (SAMA DENGAN HOMEPAGE) ==================== */
+      :root {
+        --bg-header-footer: #4b4f36;
+        --bg-content-green: #657649;
+        --bg-hero-card: #4e5238;
+        --text-light: #fffcf5;
+        --text-dark: #333333;
+        --accent-yellow: #eaddcf;
+        --accent-gold: #f0e68c;
+      }
+
+      body {
+        background-color: var(--bg-content-green);
+        color: var(--text-light);
+        font-family: "Montserrat", sans-serif;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+
+      /* ==================== 2. HEADER & NAVIGASI (SAMA DENGAN HOMEPAGE) ==================== */
+      .custom-header {
+        width: 100%;
+        padding: 15px 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: var(--bg-header-footer);
+        z-index: 50;
+        position: relative;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .header-logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-light);
+        z-index: 51;
+      }
+
+      .header-logo i {
+        font-size: 1.8rem;
+        color: var(--accent-gold);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 30px;
+        transition: 0.3s ease-in-out;
+      }
+
+      .custom-header a {
+        color: var(--accent-yellow);
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: color 0.2s ease-in-out;
+      }
+
+      .custom-header a:hover {
+        color: #ffffff;
+      }
+
+      .hamburger {
+        display: none;
+        cursor: pointer;
+        z-index: 51;
+      }
+
+      .hamburger i {
+        font-size: 1.5rem;
+        color: var(--accent-gold);
+      }
+
+      /* ==================== 3. BACKGROUND & MAIN LAYOUT ==================== */
+      .main-wrapper {
+        position: relative;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 20px;
+        text-align: center;
+      }
+
+      .hero-background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -2;
+        background-image: url("image/leaf-pattern.png");
+        background-size: cover;
+        background-position: center;
+        filter: grayscale(20%);
+      }
+      .hero-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(101, 118, 73, 0.65);
+        z-index: -1;
+      }
+
+      /* Judul Halaman */
+      .page-title {
+        font-family: "Playfair Display", serif;
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--accent-gold);
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        margin-bottom: 10px;
+      }
+
+      .page-subtitle {
+        font-size: 1rem;
+        color: var(--text-light);
+        margin-bottom: 40px;
+        letter-spacing: 0.5px;
+      }
+
+      /* ==================== 4. AREA KAMERA (CONTAINER) ==================== */
+      #container {
+        position: relative;
+        /* Menggunakan max-width agar rapi */
+        width: 100%;
+        max-width: 800px;
+        /* Aspek rasio desktop */
+        aspect-ratio: 16 / 9;
+        background-color: #2a2a2a;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        margin-bottom: 30px;
+        border: 4px solid var(--bg-header-footer);
+      }
+
+      #canvasOutput,
+      #webcam {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Agar video full di container */
+      }
+
+      #webcam {
+        z-index: 9;
+        /* Sembunyikan video asli, kita gambar di canvas */
+        visibility: hidden;
+      }
+
+      #fpsDisplay {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(0, 0, 0, 0.6);
+        color: var(--accent-gold);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        z-index: 20;
+        border: 1px solid var(--accent-gold);
+      }
+
+      /* ==================== 5. BUTTON & STATUS ==================== */
+      #startButton {
+        display: inline-block;
+        padding: 15px 40px;
+        background-color: var(--accent-gold);
+        color: #4b4f36;
+        border-radius: 50px; /* Tombol bulat */
+        font-size: 1.1rem;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.2s, background-color 0.2s;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      #startButton:hover {
+        background-color: #fff;
+        transform: translateY(-2px);
+      }
+
+      #startButton:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+      }
+
+      #loadingStatus {
+        margin-top: 20px;
+        font-size: 1rem;
+        color: var(--accent-yellow);
+        font-style: italic;
+      }
+
+      /* ==================== 6. FOOTER (SAMA DENGAN HOMEPAGE) ==================== */
+      .custom-footer {
+        width: 100%;
+        background-color: var(--bg-header-footer);
+        padding: 30px 50px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto;
+        color: #dcdcdc;
+        font-size: 0.9rem;
+      }
+
+      .footer-logo {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        color: var(--accent-gold);
+        font-weight: bold;
+        margin-right: 0;
+        text-align: center;
+      }
+      .footer-logo i {
+        font-size: 2rem;
+        margin-bottom: 5px;
+      }
+
+      .footer-center-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .footer-icons a {
+        color: white;
+        margin: 0 10px;
+        font-size: 1.5rem;
+      }
+
+      .footer-copyright {
+        font-size: 0.85rem;
+        color: #dcdcdc;
+        text-align: center;
+      }
+
+      .footer-links {
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+      .footer-links a {
+        color: #dcdcdc;
+        text-decoration: none;
+      }
+      .footer-links a:hover {
+        color: var(--accent-gold);
+      }
+
+      /* ==================== RESPONSIVE ==================== */
+      @media (max-width: 768px) {
+        .custom-header {
+          padding: 15px 20px;
+        }
+        .hamburger {
+          display: block;
+        }
+
+        .nav-links {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          background-color: var(--bg-header-footer);
+          flex-direction: column;
+          align-items: center;
+          padding: 20px 0;
+          gap: 20px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          display: none;
+        }
+        .nav-links.active {
+          display: flex;
+        }
+
+        .page-title {
+          font-size: 2rem;
+        }
+
+        /* Container Video di HP jadi Portrait */
+        #container {
+          aspect-ratio: 9 / 16;
+          max-width: 400px;
+        }
+
+        .custom-footer {
+          flex-direction: column;
+          text-align: center;
+          gap: 20px;
+          padding: 20px;
+        }
+        .footer-logo,
+        .footer-center-content,
+        .footer-links {
+          width: 100%;
+          order: initial;
+        }
+        .footer-logo {
+          order: 1;
+        }
+        .footer-center-content {
+          order: 2;
+        }
+        .footer-links {
+          order: 3;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="custom-header">
+      <div class="header-logo">
+        <i class="fas fa-sun"></i>
+        <span>Spice Lens</span>
+      </div>
+
+      <div class="hamburger" id="hamburger-menu">
+        <i class="fas fa-bars"></i>
+      </div>
+
+      <nav class="nav-links" id="nav-menu">
+        <a href="homepage.html">Beranda</a>
+        <a href="tentang-kami.html">Tentang Kami</a>
+        <a href="fitur.html">Fitur</a>
+        <a href="contact.html">Kontak</a>
+      </nav>
+    </header>
+
+    <div class="main-wrapper">
+      <div class="hero-background"></div>
+      <div class="hero-overlay"></div>
+
+      <h1 class="page-title">Real-Time Detection</h1>
+      <p class="page-subtitle">
+        Arahkan kamera ke rempah untuk mendeteksi jenisnya secara langsung
+      </p>
+
+      <div id="container">
+        <canvas id="canvasOutput"></canvas>
+        <video id="webcam" playsinline muted autoplay></video>
+        <div id="fpsDisplay">FPS: 0</div>
+      </div>
+
+      <button id="startButton">Mulai Kamera</button>
+
+      <div id="loadingStatus">Memuat model yolo... (mohon tunggu sebentar)</div>
+    </div>
+
+    <footer class="custom-footer">
+      <div class="footer-logo">
+        <i class="fas fa-sun"></i>
+        <span>Spice Lens</span>
+      </div>
+
+      <div class="footer-center-content">
+        <div class="footer-icons">
+          <a href="#"><i class="fab fa-x-twitter"></i></a>
+          <a href="#"><i class="fab fa-instagram"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p class="footer-copyright">
+          Copyright 2025. Spice Lens. All Rights Reserved
+        </p>
+      </div>
+
+      <div class="footer-links">
+        <a href="homepage.html">Beranda</a>
+        <a href="tentang-kami.html">Tentang Kami</a>
+        <a href="contact.html">Kontak</a>
+      </div>
+    </footer>
+
+    <script>
+      // === 1. SCRIPT NAVBAR (HAMBURGER) ===
+      const hamburger = document.getElementById("hamburger-menu");
+      const navMenu = document.getElementById("nav-menu");
+      const icon = hamburger.querySelector("i");
+
+      hamburger.addEventListener("click", () => {
+        navMenu.classList.toggle("active");
+        if (navMenu.classList.contains("active")) {
+          icon.classList.remove("fa-bars");
+          icon.classList.add("fa-times");
+        } else {
+          icon.classList.remove("fa-times");
+          icon.classList.add("fa-bars");
+        }
+      });
+
+      // === 2. SCRIPT DETEKSI REAL-TIME (TENSORFLOW) ===
+      const NAMA_KELAS = [
+        "Biji Ketumbar",
+        "Daun Jeruk",
+        "Daun Salam",
+        "Jahe",
+        "Jinten",
+        "Kemiri",
+        "Kencur",
+        "Kunyit",
+        "Lada",
+        "Lengkuas",
+        "Pala",
+        "Serai",
+      ];
+      const MODEL_INPUT_SIZE = 640;
+      const CONFIDENCE_THRESHOLD = 0.5;
+      const IOU_THRESHOLD = 0.5;
+      const MODEL_PATH = "best_web_model/model.json";
+
+      const video = document.getElementById("webcam");
+      const canvas = document.getElementById("canvasOutput");
+      const ctx = canvas.getContext("2d");
+      const startButton = document.getElementById("startButton");
+      const loadingStatus = document.getElementById("loadingStatus");
+      const fpsDisplay = document.getElementById("fpsDisplay");
+
+      let model;
+      let isWebcamActive = false;
+      let animationFrameId;
+      let frameCount = 0;
+      const INFERENCE_INTERVAL = 10;
+      let lastDetections = [];
+      let isInferring = false;
+      let fps = 0;
+      let frameTimes = [];
+      let lastFrameTime = 0;
+      const TARGET_FPS = 30;
+      const FRAME_INTERVAL = 1000 / TARGET_FPS;
+
+      // FUNGSI LOAD MODEL
+      async function loadModel() {
+        console.log("Memulai memuat model...");
+        try {
+          model = await tf.loadGraphModel(MODEL_PATH);
+          // Warm up model
+          const warmUpTensor = tf.zeros([
+            1,
+            MODEL_INPUT_SIZE,
+            MODEL_INPUT_SIZE,
+            3,
+          ]);
+          await model.executeAsync(warmUpTensor);
+          tf.dispose(warmUpTensor);
+
+          console.log("Model berhasil dimuat.");
+          loadingStatus.innerText =
+            "Model Siap! Klik tombol di atas untuk mulai.";
+          startButton.innerText = "Mulai Kamera";
+          startButton.disabled = false;
+        } catch (err) {
+          console.error("Gagal memuat model:", err);
+          loadingStatus.innerText =
+            "Error: Gagal memuat model. Periksa path file.";
+        }
+      }
+
+      function detectLoop(currentTime) {
+        if (!isWebcamActive) return;
+
+        if (currentTime - lastFrameTime < FRAME_INTERVAL) {
+          animationFrameId = requestAnimationFrame(detectLoop);
+          return;
+        }
+        lastFrameTime = currentTime;
+
+        // Hitung FPS
+        const now = performance.now();
+        frameTimes.push(now);
+        if (frameTimes.length > 60) frameTimes.shift();
+        if (frameTimes.length > 1) {
+          const delta = (now - frameTimes[0]) / 1000;
+          fps = Math.round(frameTimes.length / delta);
+        }
+        fpsDisplay.textContent = `FPS: ${fps}`;
+
+        // Resize canvas jika ukuran video berubah
+        if (
+          canvas.width !== video.videoWidth ||
+          canvas.height !== video.videoHeight
+        ) {
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+        }
+
+        // Gambar video ke canvas
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Gambar kotak deteksi (dari hasil inferensi sebelumnya)
+        drawDetections(lastDetections);
+        frameCount++;
+
+        // Jalankan inferensi setiap N frame (biar ringan)
+        if (frameCount % INFERENCE_INTERVAL === 0 && !isInferring) {
+          isInferring = true;
+          setTimeout(async () => {
+            await runInference();
+            isInferring = false;
+          }, 0);
+        }
+
+        animationFrameId = requestAnimationFrame(detectLoop);
+      }
+
+      async function runInference() {
+        const inputTensor = tf.browser
+          .fromPixels(video)
+          .resizeBilinear([MODEL_INPUT_SIZE, MODEL_INPUT_SIZE])
+          .cast("float32")
+          .div(255.0)
+          .expandDims(0);
+
+        const outputTensor = model.execute(inputTensor);
+        // Sesuaikan output tensor jika perlu transpose
+        const transposedOutput = outputTensor.transpose([0, 2, 1]);
+
+        lastDetections = await processOutput(transposedOutput);
+
+        tf.dispose([inputTensor, outputTensor]);
+      }
+
+      async function processOutput(transposedOutput) {
+        const numBoxes = transposedOutput.shape[1];
+        const numClasses = NAMA_KELAS.length;
+        const outputData = await transposedOutput.data();
+        tf.dispose(transposedOutput);
+
+        let boxes = [];
+        let scores = [];
+        let classIndices = [];
+
+        for (let i = 0; i < numBoxes; i++) {
+          const offset = i * (4 + numClasses);
+          const classScores = outputData.slice(
+            offset + 4,
+            offset + 4 + numClasses
+          );
+
+          let maxScore = 0;
+          let maxClassIndex = -1;
+          for (let j = 0; j < numClasses; j++) {
+            if (classScores[j] > maxScore) {
+              maxScore = classScores[j];
+              maxClassIndex = j;
+            }
+          }
+
+          if (maxScore > CONFIDENCE_THRESHOLD) {
+            const cx = outputData[offset];
+            const cy = outputData[offset + 1];
+            const w = outputData[offset + 2];
+            const h = outputData[offset + 3];
+
+            const y1 = (cy - h / 2) / MODEL_INPUT_SIZE;
+            const x1 = (cx - w / 2) / MODEL_INPUT_SIZE;
+            const y2 = (cy + h / 2) / MODEL_INPUT_SIZE;
+            const x2 = (cx + w / 2) / MODEL_INPUT_SIZE;
+
+            boxes.push([y1, x1, y2, x2]);
+            scores.push(maxScore);
+            classIndices.push(maxClassIndex);
+          }
+        }
+
+        if (boxes.length === 0) return [];
+
+        const boxTensors = tf.tensor2d(boxes);
+        const scoreTensors = tf.tensor1d(scores);
+
+        const selectedIndices = await tf.image.nonMaxSuppressionAsync(
+          boxTensors,
+          scoreTensors,
+          100,
+          IOU_THRESHOLD,
+          CONFIDENCE_THRESHOLD
+        );
+
+        const selectedIndicesData = await selectedIndices.data();
+        const finalBoxes = [];
+        for (let i = 0; i < selectedIndicesData.length; i++) {
+          const index = selectedIndicesData[i];
+          finalBoxes.push({
+            box: boxes[index],
+            score: scores[index],
+            classIndex: classIndices[index],
+          });
+        }
+
+        tf.dispose([boxTensors, scoreTensors, selectedIndices]);
+        return finalBoxes;
+      }
+
+      function drawDetections(boxes) {
+        boxes.forEach((boxData) => {
+          const [y1_norm, x1_norm, y2_norm, x2_norm] = boxData.box;
+          const score = boxData.score;
+          const classIndex = boxData.classIndex;
+          const label = NAMA_KELAS[classIndex];
+
+          const x = x1_norm * canvas.width;
+          const y = y1_norm * canvas.height;
+          const w = (x2_norm - x1_norm) * canvas.width;
+          const h = (y2_norm - y1_norm) * canvas.height;
+
+          // Kotak Deteksi
+          ctx.strokeStyle = "#00FFFF";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x, y, w, h);
+
+          // Label Background
+          ctx.fillStyle = "#00FFFF";
+          ctx.font = "18px Arial";
+          const text = `${label} (${(score * 100).toFixed(1)}%)`;
+          const textWidth = ctx.measureText(text).width;
+          ctx.fillRect(x, y, textWidth + 8, 24);
+
+          // Label Text
+          ctx.fillStyle = "#000000";
+          ctx.fillText(text, x + 4, y + 18);
+        });
+      }
+
+      async function toggleWebcam() {
+        if (isWebcamActive) {
+          isWebcamActive = false;
+          cancelAnimationFrame(animationFrameId);
+          const tracks = video.srcObject.getTracks();
+          tracks.forEach((track) => track.stop());
+          video.srcObject = null;
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          startButton.innerText = "Mulai Kamera";
+          lastDetections = [];
+          isInferring = false;
+        } else {
+          try {
+            const isMobile = window.matchMedia("(max-width: 768px)").matches;
+            const videoConstraints = {
+              facingMode: "environment",
+              width: { ideal: isMobile ? 720 : 1280 },
+              height: { ideal: isMobile ? 1280 : 720 },
+            };
+
+            const stream = await navigator.mediaDevices.getUserMedia({
+              video: videoConstraints,
+              audio: false,
+            });
+            video.srcObject = stream;
+            video.onloadedmetadata = async () => {
+              await video.play();
+              isWebcamActive = true;
+              startButton.innerText = "Hentikan Kamera";
+              detectLoop(performance.now());
+            };
+          } catch (err) {
+            console.error("Error mengakses webcam:", err);
+            alert("Gagal mengakses webcam. Pastikan izin diberikan.");
+          }
+        }
+      }
+
+      startButton.disabled = true;
+      startButton.addEventListener("click", toggleWebcam);
+      loadModel();
+    </script>
+  </body>
+</html>
